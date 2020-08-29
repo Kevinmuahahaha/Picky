@@ -1,0 +1,61 @@
+======================================  Segment A ======================================
+
+
+                if(!is_recursive){
+                    //check time
+                    long net_time = System.currentTimeMillis() - last_check_time;
+                    if( net_time < 30000 ) continue;
+                    else{
+                      //  Log.wtf(TAG, "Thread: " +threadCount + ", " + net_time/1000 + " seconds passed. Start check.");
+                        last_check_time = net_time;
+                    }
+
+                    int current_download_length = rangeEnds+1;
+                    int net_total = total - rangeStart;
+                    if( net_total < 2048000 ){ //Didn't pass the check, starting rescue threads
+                        Log.wtf(TAG, (float)net_time/1000 + " seconds into Thread: " + threadCount + ", Tooo slow.  Speed: " + net_total);
+                        Log.wtf(TAG,"Thread: " + threadCount +", Starting rescue threads.");
+                        //Retract failed bytes
+                        Handler uiHandler = new Handler(Looper.getMainLooper());
+                        int finalAbsolute_total_total = absolute_total_total;
+                        uiHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                DownloadUI.updateDownloadedBytes(-finalAbsolute_total_total);
+                                Log.wtf(TAG,"Rectracted Bytes: " + finalAbsolute_total_total);
+                            }
+
+                        });
+                        input.close(); //clean up, and construct rescue threads.
+                        connection.disconnect();
+                        int increment = (current_download_length / mRescueSplinterCount) - 1;
+                        if( increment <= 0) increment = 1;
+                        int tmp_start = rangeStart;
+                        int tmp_end = tmp_start + increment;
+                        if(tmp_end > rangeEnds) tmp_end = rangeEnds;
+                        ArrayList<Thread> thread_download_ranger = new ArrayList<Thread>();
+                        int thread_count = 1; // thread counting from 1
+                        while ( tmp_start <= current_download_length - 1 ){
+                            DownloadByRange download_ranger = new DownloadByRange();
+                            download_ranger.assign(downloadString,sharedStorageArray,tmp_start,tmp_end);
+                            download_ranger.is_recursive = true;
+                            download_ranger.threadCount = 1000 + thread_count ++ ;
+                            Thread tmp_add = new Thread(download_ranger);
+                            thread_download_ranger.add(tmp_add);
+                            tmp_add.start();
+                            tmp_start = tmp_end + 1;
+                            tmp_end = tmp_start + increment;
+                            if(tmp_end > rangeEnds) tmp_end = rangeEnds;
+                        }
+                        for(Thread item : thread_download_ranger) item.join();
+                        break; // current thread ends. break out of the loop.
+
+                    } // too slow, close current connection. start rescue threads
+                    else{
+                 //       Log.wtf(TAG, net_time/1000+" seconds into Thread: " + threadCount + ", No need to reconnect. Speed: " + net_total);
+                    }
+                }
+
+                else{ // if it's recursive, aka in a rescue thread
+
+                }v

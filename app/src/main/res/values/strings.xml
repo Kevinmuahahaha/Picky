@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Picky</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Picky</string>
+    <string name="home">Picky</string>
+    <string name="menu_gallery">Add</string>
+    <string name="menu_slideshow">Check</string>
+    <string name="menu_tools">Tools</string>
+    <string name="menu_share">Share</string>
+    <string name="menu_send">Send</string>
+
+    <string name="placeholder">placeholder</string>
+    <string name="alias">alias</string>
+    <string name="aka">aka.</string>
+    <string name="dark_mode">switch mode</string>
+</resources>

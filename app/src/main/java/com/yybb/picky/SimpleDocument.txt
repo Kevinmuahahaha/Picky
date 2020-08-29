@@ -1,0 +1,112 @@
+                                connectionChecker
+#################################################
+    Params: Activity, String("connect"/"download")
+    Example:
+        new connectionChecker(MainActivity.this, "connect").execute("checking connection");
+    Effect:
+        TestingTask == "connect"
+            updates 'test_result_internet_connected'
+            shows a toast message (success/fail)
+
+        TestingTask == "download"
+            updates progress text # Maybe remove it?
+            updates 'test_result_can_download'
+            shows a toast message when success/fail
+
+
+                                    DisplayOneRepo
+#################################################
+    Params: String
+    Example: (routine)
+        Intent intent = new Intent(MainActivity.this, DisplayOneRepo.class);
+        intent.putExtra(REPO_NOTIFICATION, "test"); // display the repo called "test"
+        startActivity(intent);
+    Effect:
+        starts another activity, displaying images(thumbs) of a repo
+
+
+                                      repoManager
+#################################################
+    Params: File, File
+    Example:
+        repoManager.unzipDaemon(new File("/path/str.zip"), new File("/path/destination"));
+    Effect:
+        unzips a zip file in background.
+
+
+                                      Downloaders
+#################################################
+    -------------------------------KleinUndSchnell
+    Params: String, String
+    Example:
+        new kleinUndSchell().execute( "http:/url/",  "/path/to/file.jpg" );
+    Effect:
+        download 1 file in background.
+        takes up a big chunk of memory as temporary storage.
+            memory usage = file size.
+    Behaviour:
+        spawn 10 threads, download from http connection.
+        10s later, slow threads will be killed,
+            from which a few more threads will be spawned.
+            spawned threads won't start any other threads.
+        during download, store bytes in memory [!]
+        write to file once all threads are done.
+    -------------------------------fileDownloader
+    Params: String...
+    Example:
+        fileDownloader FD = new fileDownloader();
+        FD.setProgressTextIndicator(progress_text); #optional, EditText
+        FD.execute(testlink);
+    Effect:
+        single thread download, 1 file at a time.
+        no return, no display.
+
+
+                                      fileChecker
+#################################################
+    Params: Void
+    Example:
+        fileChecker.folderInit();
+        fileChecker.canWrite();
+    Effect:
+        folderInit()
+            make sure the app folder exist, or return error message.
+            updates 'folderPrefix'
+            updtaes 'writable'
+            shows a toast message after an attempt to create app folder.
+        canWrite()
+            updtaes 'writable'
+            return true/false
+
+
+                                permissionChecker
+#################################################
+    Params: context / context, String...
+    Example:
+        if( !permissionChecker.canWrite(MainActivity.this) ){
+            msg.shrt(" No Permission to Write ");
+            permissionChecker.requestWrite(MainActivity.this);
+        } // else can write
+    Effect:
+        hasPermissions(Context, String...)
+            return if all permissions specified are granted.
+        requestWrite(Activity)
+            prompt request permission(no effect when permission is forced denied)
+        canWrite(Activity)
+            return true/false
+            only tells if the app has permission or not. Folder isn't checked.
+
+
+                                              msg
+#################################################
+    Params: String / long(int)
+    Example:
+        #### need manual init by assigning context
+        msg.context = MainActivity.this;
+        msg.text("longer string");
+        msg.shrt("shorter string");
+        msg.popup("displaying a string in an alert dialog");
+    Effect:
+        shows a message.
+        or
+        humanReadableByteCountBin(long how_many_bytes) returns String

@@ -1,0 +1,21 @@
+#Design 1
+	each thread starts a runnable Download.class
+	Download.class takes url, and byte-range, write to file.part1 ...
+		https://stackoverflow.com/questions/28771100/download-a-file-in-java-using-multi-threading
+	merge them when all download ends
+		https://stackoverflow.com/questions/16927263/appending-byte-to-end-of-a-binary-file
+#Design 2[Picked]
+	shared byte array(size=file)
+	Download.class takes url, and byte-range, shared-byte-array
+	write bytes to file.zip when all download is done.
+
+#Improvement==========================================================
+- Better error report on KleinUndSchnell
+- Pass boolean[] threads_status to KleinUndSchnell
+	each block represents the status of a download thread
+	before reporting DOWNLOAD_SUCCESS, check the array
+	if any of them isn't "true", then report error
+- Check if repo exist when add
+- Check if repo is currently being added
+- Enable repo from sites other than http://q34hxm3.xyz
+	in GalleryFragment.java, when adding a repo

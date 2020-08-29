@@ -1,0 +1,20 @@
+- Make service exitable( let retry in DownloadByRange fail )
+- Make global config start with a dot -- a hidden file
+- Undownloaded pics -- only when shown thumb -- can be downloaded
+- Restore view on AddRepo, if user was browsing around during adding
+- HomeFragment:
+	if date.now != date.last_use: change lofi gif?
+- record scroll position in DisplayOneRepo
+	try
+	https://stackoverflow.com/questions/27816217/how-to-save-recyclerviews-scroll-position-using-recyclerview-state
+- Ask for wrtie permission before DisplayOneRepo
+	if disallowed, set canDownload=false
+- Move notification from RepoManager.class to msg.class
+- On thumb-long-press, show option menu
+	re-download
+	open in <another app>
+? Add 'repo.desc' on server
+? Download with info from 'repo.desc'
+? Learn about Service
+  For a steady download
+	https://developer.android.com/guide/components/services
